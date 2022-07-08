@@ -1,0 +1,8 @@
+<%- include('./particals/header') %>
+    <h1 class="center">
+        Hello, <%= user%>
+            <form action="/logout" method="post">
+                <button class="btn">logout</button>
+            </form>
+    </h1>
+    <%- include('./particals/footer') %>
