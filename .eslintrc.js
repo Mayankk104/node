@@ -16,6 +16,18 @@ module.exports = {
     ],
     rules: {
         indent: ['error', 4],
+        'import/extensions': ['warn', {
+            pattern: {
+                ts: 'never',
+            },
+        }],
     },
     ignorePatterns: ['dist/*'],
+    settings: {
+        'import/resolver': {
+            node: {
+                extensions: ['.ts'],
+            },
+        },
+    },
 };
