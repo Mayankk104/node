@@ -1,41 +1,23 @@
-/* eslint-disable no-console */
-import chalk from 'chalk';
-import path from 'path';
-import { appendFileSync } from 'fs';
+import winston from 'winston';
 
-const logsPath = path.join(__dirname, '..', '..', 'logs', 'logs.log');
-console.clear();
+const logger = winston.createLogger({
+    level: 'info',
+    format: winston.format.json(),
+    defaultMeta: { service: 'user-service' },
+    transports: [
+        new winston.transports.File({ filename: 'logs/error.log', level: 'error' }),
+        new winston.transports.File({ filename: 'logs/combined.log' }),
+    ],
+});
 
-function logger(log: string) {
-    if (process.env.ENVIROMENT === 'PRODUCTION') {
-        appendFileSync(logsPath, log);
-    } else {
-        console.log(log);
-    }
+//
+// If we're not in production then log to the `console` with the format:
+// `${info.level}: ${info.message} JSON.stringify({ ...rest }) `
+//
+if (process.env.NODE_ENV !== 'production') {
+    logger.add(new winston.transports.Console({
+        format: winston.format.simple(),
+    }));
 }
 
-function validate(log: any, logic: Function) {
-    if (!log) {
-        logger(chalk.red('nullish passed in logger'));
-    } else if (typeof log !== 'string') {
-        logger(chalk.red('pass string values'));
-    } else {
-        logger(logic(log));
-    }
-}
-
-export function info(log: any) {
-    validate(log, chalk.blue);
-}
-
-export function warning(log: any) {
-    validate(log, chalk.yellow);
-}
-
-export function error(log: any) {
-    validate(log, chalk.red);
-}
-
-export function clear() {
-    console.clear();
-}
+export default logger;
