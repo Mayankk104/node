@@ -21,7 +21,7 @@ class WorkerThreadController {
     static getFibonacciNumsWithWorker = async (req: Request, res: Response) => {
         const { nums } = req.body;
         const start = Date.now();
-        const relativePath = resolve(__dirname, './fibonacci-worker.ts');
+        const relativePath = resolve(__dirname, './fibonacci-worker');
 
         if (!Array.isArray(nums)) return res.status(400).json({ message: 'send nums' });
 
